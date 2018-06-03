@@ -1,11 +1,19 @@
 package com.personal.tools.simplestvp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
+public class MainActivity extends AppCompatActivity
+    implements View.OnClickListener{
+
+    private static final String LOG_TAG = "VirtualApp";
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -17,8 +25,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Example of a call to a native method
-        TextView tv = (TextView) findViewById(R.id.sample_text);
+        TextView tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        findViewById(R.id.btn_start_ngame).setOnClickListener(this);
+        findViewById(R.id.btn_start_speedmobile).setOnClickListener(this);
     }
 
     /**
@@ -26,4 +41,28 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.btn_start_ngame:
+            {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.tmgp.sgame");
+                if (intent != null){
+                    Log.d(LOG_TAG,"intent:" + intent);
+                    startActivity(intent);
+                }
+            }
+                break;
+            case R.id.btn_start_speedmobile:{
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.tencent.tmgp.speedmobile");
+                if (intent != null){
+                    Log.d(LOG_TAG,"intent:" + intent);
+                    startActivity(intent);
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
 }
