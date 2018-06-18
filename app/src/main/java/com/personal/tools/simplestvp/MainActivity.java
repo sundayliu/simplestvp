@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
@@ -17,12 +18,15 @@ public class MainActivity extends AppCompatActivity
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
+        System.loadLibrary("native-lib");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, getResources().getString(R.string.admob_app_id));
 
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
